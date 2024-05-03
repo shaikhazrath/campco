@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
     --background: #606060;
@@ -67,6 +68,7 @@
   }
 }
 
+
 @layer base {
   * {
     @apply border-border;
@@ -89,3 +91,13 @@
   @apply bg-blue-300 rounded;
 }
 
+@keyframes ping {
+  0% {
+    transform: scale(0.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}

@@ -9,15 +9,15 @@ const GoogleAuth = () => {
   const responseGoogle = async (response) => {
     try {
       const idToken = response.credential;
-      console.log(idToken);
       const res = await axios.post(`http://localhost:9000/user`, {
         idToken,
       });
+      if(res.data.message)
       localStorage.setItem("token", res.data.token);
       router.push("/profile");
     } catch (error) {
       console.log(error);
-      // setError(error.response.data.message);
+      setError(error.response.data.message);
     }
   };
 

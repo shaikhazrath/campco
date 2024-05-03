@@ -14,7 +14,6 @@ const verifyToken = async(req, res, next) => {
         req.user = user;
         next();
     } catch (err) {
-        console.error(err);
         return res.status(403).json({ message: 'Failed to authenticate token' });
     }
 };

@@ -35,7 +35,16 @@ const userSchema = new mongoose.Schema({
     online:{
         type:Boolean,
         default:false
-    }
+    },
+    bio:{
+        type: String,
+    },
+    branch:{
+        type: String,
+    },
+    pass_out_year:{
+        type:Number
+    },
 })
 
 const User = mongoose.model("User",userSchema)

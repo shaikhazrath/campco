@@ -9,6 +9,7 @@ import Message from "../model/messageModel.js";
 router.post("/", async (req, res) => {
   try {
     const { idToken } = req.body;
+
     const ticket = await client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID,
@@ -17,25 +18,45 @@ router.post("/", async (req, res) => {
     const { name, email } = payload;
     const emailDomain = email.split("@")[1];
 
-    // if (emailDomain != "anits.edu.in") {
-    //   return res
-    //     .status(403)
-    //     .json({ message: "Unauthorized: Only @anits.edu.in emails allowed" });
+    // Check if the email domain is allowed
+    // if (emailDomain !== "anits.edu.in") {
+    //   return res.status(403).json({ message: "Unauthorized: Only @anits.edu.in emails allowed" });
     // }
+
+    // Find or create the user
     let user = await User.findOne({ email });
     if (!user) {
       user = new User({ name, email, emailDomain });
       await user.save();
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
-    res.status(201).json({ token, name, email });
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+
+    // Return response
+    const responseData = {
+      token,
+      name,
+      email,
+      message: user.isNew ? 'New user created' : 'User found',
+    };
+    res.status(201).json(responseData);
   } catch (err) {
     console.error(err);
-    res.status(400).send(err.message);
+    res.status(500).send("Internal Server Error");
   }
 });
+
+
+router.get("/checkauth",verifyToken,(req,res)=>{
+  try {
+    const message = "user authenticated"
+    res.status(200).json({message});
+  } catch (error) {
+    res.status(400).send(error.message);
+
+  }
+})
 
 router.get("/userprofile", verifyToken, async (req, res) => {
   try {
@@ -49,31 +70,79 @@ router.get("/userprofile", verifyToken, async (req, res) => {
   }
 });
 
+router.put("/updateProfile", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user;
+      const { name, bio,branch ,pass_out_year} = req.body;
+      const updateFields = { name, bio,branch ,pass_out_year};
+    const updatedUser = await User.findByIdAndUpdate(userId, updateFields, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
 router.get("/othersprofile/:id", verifyToken, async (req, res) => {
   try {
     const userId = req.params.id;
+    const currentUserId = req.user.id;
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(user);
+    const connectedUsersCount = user.connectedUsers.length;
+    let mutualsCount = 0;
+    if (user.connectedUsers.includes(currentUserId)) {
+      const currentUser = await User.findById(currentUserId);
+      mutualsCount = currentUser.connectedUsers.filter(
+        id => user.connectedUsers.includes(id)
+      ).length;
+    }
+    let connectionStatus = '';
+    if (user.connectedUsers.includes(currentUserId)) {
+      connectionStatus = 'connected';
+    } else if (user.requested.includes(currentUserId)) {
+      connectionStatus = 'acceptRequest';
+    } else if (user.requests.includes(currentUserId)) {
+      connectionStatus = 'removeRequest';
+    }else{
+      connectionStatus = "sendRequest"
+    }
+    const { name, bio, pass_out_year, branch } = user;
+    res.status(200).json({
+      username:name,
+      bio,
+      pass_out_year,
+      branch,
+      connectedUsersCount,
+      mutualsCount,
+      connectionStatus
+    });
   } catch (error) {
     console.error(error);
     res.status(400).send(error.message);
   }
 });
 
-router.get("/randomuser", verifyToken, async (req, res) => {
+router.get("/findpeople", verifyToken, async (req, res) => {
   try {
-    const count = await User.countDocuments();
-    const randomIndex = Math.floor(Math.random() * count);
-    const randomUser = await User.findOne({ _id: { $ne: req.user._id } }).skip(
-      randomIndex
-    );
-    if (!randomUser) {
-      return res.status(404).json({ message: "No random user found" });
-    }
-    res.status(200).json(randomUser);
+    const userId = req.user.id;
+    const currentUser = await User.findById(userId);
+    const usersWithSimilarBackground = await User.find({
+      _id: { $ne: userId }, 
+      // branch: currentUser.branch,
+      // pass_out_year: currentUser.pass_out_year
+    });
+    const mutualConnections = currentUser.connectedUsers;
+    const recommendedUsers = usersWithSimilarBackground.filter(user => {
+      return user._id !== userId && !mutualConnections.includes(user._id);
+    });
+    res.status(200).json(recommendedUsers);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -107,6 +176,38 @@ router.get("/sendRequest/:userId", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+router.delete("/removeRequest/:userId", verifyToken, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const currentUser = req.user;
+    const recipientUser = await User.findById(userId);
+    if (!recipientUser) {
+      return res.status(404).json({ message: "Recipient user not found" });
+    }
+    // Removing request from currentUser's requested array
+    const currentUserIndex = currentUser.requested.indexOf(recipientUser._id);
+    if (currentUserIndex !== -1) {
+      currentUser.requested.splice(currentUserIndex, 1);
+    }
+
+    // Removing request from recipientUser's requests array
+    const recipientUserIndex = recipientUser.requests.indexOf(currentUser._id);
+    if (recipientUserIndex !== -1) {
+      recipientUser.requests.splice(recipientUserIndex, 1);
+    }
+
+    await currentUser.save();
+    await recipientUser.save();
+    res.status(200).json({ message: "Request removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 router.get("/acceptRequest/:userId", verifyToken, async (req, res) => {
   try {

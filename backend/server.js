@@ -2,11 +2,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import http from 'http'; // Import http module for socket.io
-import { Server } from 'socket.io'; // Import Server class from socket.io
+import http from 'http';
+import { Server } from 'socket.io'; 
 import UserMannager from './router/userRoute.js';
 import Message from './model/messageModel.js';
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: './.env' });
 import jwt from 'jsonwebtoken';
 import User from './model/userModel.js';
 const app = express();
@@ -91,8 +91,8 @@ io.on('connection', async (socket) => {
   socket.on('disconnect', async () => {
     if (socket.user) {
       socket.user.online = false;
+      socket.user.socketId = '';
       await socket.user.save();
-      console.log('User disconnected:', socket.user.name);
     }
   });
 });
