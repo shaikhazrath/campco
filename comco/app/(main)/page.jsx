@@ -192,7 +192,7 @@ const Home = () => {
                   </div>
                 </MenubarTrigger>
                 <MenubarContent>
-                  <Link href="/profile">
+                  <Link href="/Profile">
                     <MenubarItem>Profie</MenubarItem>
                   </Link>
 
@@ -309,7 +309,7 @@ const Home = () => {
                 <IoIosArrowBack color="white" size={30} />
               </a>
               <Link
-                href={`/profile/${recId}`}
+                href={`/Profile/${recId}`}
                 className="flex bg-foreground px-8 py-2 text-white rounded-3xl justify-between gap-4 text-xl font-bold items-center"
               >
                 <Avatar className="inline-block">

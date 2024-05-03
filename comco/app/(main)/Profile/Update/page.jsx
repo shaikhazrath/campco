@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/avatar"
 import { useRouter } from 'next/navigation';
 
-const updateProfile = () => {
+const UpdateProfile = () => {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [passoutYear, setPassoutYear] = useState('');
@@ -35,7 +35,7 @@ const updateProfile = () => {
         { name, bio , pass_out_year: passoutYear,branch },
         config
       );
-      router.push('/profile')
+      router.push('/Profile')
     } catch (error) {
       setError(error.response.data.error);
       console.error('Update profile failed:', error.response);
@@ -80,7 +80,7 @@ const updateProfile = () => {
 
   return (
     <div>
-      <NavBar  url='/profile'/>
+      <NavBar  url='/Profile'/>
       <div className='text-white w-full flex justify-center items-center flex-col md:m-5'>
         <h2 className=' text-xl text-white font-bold my-5'>Update Profile</h2>
         {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -142,4 +142,4 @@ const updateProfile = () => {
   );
 };
 
-export default updateProfile;
+export default UpdateProfile;

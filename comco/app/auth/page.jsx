@@ -14,7 +14,7 @@ const GoogleAuth = () => {
       });
       if(res.data.message)
       localStorage.setItem("token", res.data.token);
-      router.push("/profile");
+      router.push("/Profile");
     } catch (error) {
       console.log(error);
       setError(error.response.data.message);

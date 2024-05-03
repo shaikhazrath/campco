@@ -41,7 +41,7 @@ const Profile = () => {
 
 
   const handleupdate =()=>{
-    router.push('/profile/update')
+    router.push('/Profile/update')
   }
   if (loading) {
     return <h1>Loading....</h1>;

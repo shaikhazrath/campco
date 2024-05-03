@@ -96,7 +96,7 @@ const Chat = ({ params }) => {
             <IoIosArrowBack color="white" size={30} />
           </Link>
           <Link
-            href="/profile"
+            href="/Profile"
             className="flex bg-foreground px-8 py-2 text-white rounded-3xl justify-between gap-4 text-xl font-bold items-center"
           >
             <Avatar className="inline-block">
