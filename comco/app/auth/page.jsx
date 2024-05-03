@@ -12,7 +12,7 @@ const GoogleAuth = () => {
       const res = await axios.post(`https://fromloop.vercel.app/user`, {
         idToken,
       });
-      if(res.data.message)
+      if(res)
       localStorage.setItem("token", res.data.token);
       router.push("/Profile");
     } catch (error) {
