@@ -31,7 +31,7 @@ const updateProfile = () => {
         },
       };
       const response = await axios.put(
-        'http://localhost:9000/user/updateProfile',
+        'https://fromloop.vercel.app/user/updateProfile',
         { name, bio , pass_out_year: passoutYear,branch },
         config
       );
@@ -51,7 +51,7 @@ const updateProfile = () => {
           Authorization: token,
         },
       };
-      const res = await axios.get("http://localhost:9000/user/userprofile", config);
+      const res = await axios.get("https://fromloop.vercel.app/user/userprofile", config);
       setName(res.data.user.name);
       setBio(res.data.user.bio)
       const currentYear = new Date().getFullYear();

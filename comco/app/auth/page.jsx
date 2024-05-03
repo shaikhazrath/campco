@@ -9,7 +9,7 @@ const GoogleAuth = () => {
   const responseGoogle = async (response) => {
     try {
       const idToken = response.credential;
-      const res = await axios.post(`http://localhost:9000/user`, {
+      const res = await axios.post(`https://fromloop.vercel.app/user`, {
         idToken,
       });
       if(res.data.message)

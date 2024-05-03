@@ -21,7 +21,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const res = await axios.get(
-        `http://localhost:9000/user/othersprofile/${userId}`,
+        `https://fromloop.vercel.app/user/othersprofile/${userId}`,
         config
       );
       setUserInfo(res.data);
@@ -47,7 +47,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.get(
-        `http://localhost:9000/user/sendRequest/${userId}`,
+        `https://fromloop.vercel.app/user/sendRequest/${userId}`,
         config
       );
       getProfile()
@@ -70,7 +70,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.delete(
-        `http://localhost:9000/user/removeRequest/${userId}`,
+        `https://fromloop.vercel.app/user/removeRequest/${userId}`,
         config
       );
       console.log(req);
@@ -90,7 +90,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.get(
-        `http://localhost:9000/user/acceptRequest/${userId}`,
+        `https://fromloop.vercel.app/user/acceptRequest/${userId}`,
         config
       );
       getProfile()

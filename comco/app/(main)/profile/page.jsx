@@ -22,7 +22,7 @@ const Profile = () => {
           Authorization: token,
         },
       };
-      const res = await axios.get("http://localhost:9000/user/userprofile", config);
+      const res = await axios.get("https://fromloop.vercel.app/user/userprofile", config);
       setUserInfo(res.data.user);
       setLoading(false);
     } catch (error) {

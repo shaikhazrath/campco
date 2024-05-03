@@ -14,7 +14,7 @@ const Notifications = () => {
             Authorization: token,
           },
         };
-        const res = await axios.get("http://localhost:9000/user/viewRequests", config);
+        const res = await axios.get("https://fromloop.vercel.app/user/viewRequests", config);
         setRequestedUsers(res.data);
       } catch (error) {
         console.error(error);
@@ -32,7 +32,7 @@ const Notifications = () => {
           Authorization: token,
         },
       };
-      await axios.get(`http://localhost:9000/user/acceptRequest/${userId}`, config);
+      await axios.get(`https://fromloop.vercel.app/user/acceptRequest/${userId}`, config);
       const updatedUsers = requestedUsers.filter((user) => user._id !== userId);
       setRequestedUsers(updatedUsers);
     } catch (error) {

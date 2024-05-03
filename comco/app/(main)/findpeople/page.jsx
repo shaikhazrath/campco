@@ -16,7 +16,7 @@ const Search = () => {
               Authorization: token,
             },
           };
-      const response = await axios.get('http://localhost:9000/user/findpeople',config); 
+      const response = await axios.get('https://fromloop.vercel.app/user/findpeople',config); 
       setPeople(response.data);
       console.log(response.data)
     } catch (error) {

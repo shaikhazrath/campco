@@ -73,7 +73,7 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const newSocket = io("http://localhost:9000", {
+    const newSocket = io("https://fromloop.vercel.app", {
       auth: {
         token: token,
       },
@@ -99,7 +99,7 @@ const Home = () => {
       const fetchMessages = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:9000/user/userChat/${recId}`,
+            `https://fromloop.vercel.app/user/userChat/${recId}`,
             {
               headers: {
                 Authorization: `${localStorage.getItem("token")}`,
@@ -146,7 +146,7 @@ const Home = () => {
     const fetchConnectedUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/user/inbox",
+          "https://fromloop.vercel.app/user/inbox",
           config
         );
         setConnectedUsers(response.data);
