@@ -10,13 +10,13 @@ dotenv.config({ path: './.env' });
 import jwt from 'jsonwebtoken';
 import User from './model/userModel.js';
 const app = express();
-app.use(cors('*'));
+app.use(cors('https://fromloop.vercel.app/'));
 app.use(express.json());
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*', 
+    origin: 'https://fromloop.vercel.app/', 
     methods: ['GET', 'POST'],
     allowedHeaders: ['Authorization'], 
     credentials: true,
