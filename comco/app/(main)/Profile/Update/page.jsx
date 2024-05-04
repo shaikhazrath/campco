@@ -31,7 +31,7 @@ const UpdateProfile = () => {
         },
       };
       const response = await axios.put(
-        'https://fromloop.vercel.app/user/updateProfile',
+        `${process.env.NEXT_PUBLIC_URL}/user/updateProfile`,
         { name, bio , pass_out_year: passoutYear,branch },
         config
       );
@@ -51,7 +51,7 @@ const UpdateProfile = () => {
           Authorization: token,
         },
       };
-      const res = await axios.get("https://fromloop.vercel.app/user/userprofile", config);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_URL}/user/userprofile`, config);
       setName(res.data.user.name);
       setBio(res.data.user.bio)
       const currentYear = new Date().getFullYear();
@@ -80,7 +80,7 @@ const UpdateProfile = () => {
 
   return (
     <div>
-      <NavBar  url='/Profile'/>
+      <NavBar  url='/profile'/>
       <div className='text-white w-full flex justify-center items-center flex-col md:m-5'>
         <h2 className=' text-xl text-white font-bold my-5'>Update Profile</h2>
         {error && <p style={{ color: 'red' }}>{error}</p>}

@@ -21,7 +21,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const res = await axios.get(
-        `https://fromloop.vercel.app/user/othersprofile/${userId}`,
+        `${process.env.NEXT_PUBLIC_URL}/user/othersprofile/${userId}`,
         config
       );
       setUserInfo(res.data);
@@ -47,7 +47,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.get(
-        `https://fromloop.vercel.app/user/sendRequest/${userId}`,
+        `${process.env.NEXT_PUBLIC_URL}/user/sendRequest/${userId}`,
         config
       );
       getProfile()
@@ -70,7 +70,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.delete(
-        `https://fromloop.vercel.app/user/removeRequest/${userId}`,
+        `${process.env.NEXT_PUBLIC_URL}/user/removeRequest/${userId}`,
         config
       );
       console.log(req);
@@ -90,7 +90,7 @@ const OthersProfile = ({ params }) => {
         },
       };
       const req = await axios.get(
-        `https://fromloop.vercel.app/user/acceptRequest/${userId}`,
+        `${process.env.NEXT_PUBLIC_URL}/user/acceptRequest/${userId}`,
         config
       );
       getProfile()
@@ -166,7 +166,6 @@ const OthersProfile = ({ params }) => {
   onClick={() => {
     switch (connectionStatus) {
       case 'connected':
-        router.push('/');
         break;
       case 'removeRequest':
         removeRequest();

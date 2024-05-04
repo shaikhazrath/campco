@@ -73,7 +73,7 @@ const Home = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const newSocket = io("https://fromloop.vercel.app", {
+    const newSocket = io(`${process.env.NEXT_PUBLIC_URL}`, {
       auth: {
         token: token,
       },
@@ -99,7 +99,7 @@ const Home = () => {
       const fetchMessages = async () => {
         try {
           const response = await axios.get(
-            `https://fromloop.vercel.app/user/userChat/${recId}`,
+            `${process.env.NEXT_PUBLIC_URL}/user/userChat/${recId}`,
             {
               headers: {
                 Authorization: `${localStorage.getItem("token")}`,
@@ -146,7 +146,7 @@ const Home = () => {
     const fetchConnectedUsers = async () => {
       try {
         const response = await axios.get(
-          "https://fromloop.vercel.app/user/inbox",
+          `${process.env.NEXT_PUBLIC_URL}/user/inbox`,
           config
         );
         setConnectedUsers(response.data);
@@ -192,7 +192,7 @@ const Home = () => {
                   </div>
                 </MenubarTrigger>
                 <MenubarContent>
-                  <Link href="/Profile">
+                  <Link href="/profile">
                     <MenubarItem>Profie</MenubarItem>
                   </Link>
 
@@ -309,7 +309,7 @@ const Home = () => {
                 <IoIosArrowBack color="white" size={30} />
               </a>
               <Link
-                href={`/Profile/${recId}`}
+                href={`/profile/${recId}`}
                 className="flex bg-foreground px-8 py-2 text-white rounded-3xl justify-between gap-4 text-xl font-bold items-center"
               >
                 <Avatar className="inline-block">

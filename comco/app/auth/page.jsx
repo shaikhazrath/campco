@@ -9,15 +9,16 @@ const GoogleAuth = () => {
   const responseGoogle = async (response) => {
     try {
       const idToken = response.credential;
-      const res = await axios.post(`https://fromloop.vercel.app/user`, {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/user`, {
         idToken,
       });
-      if(res)
+      console.log(res)
+      if(res.data.message)
       localStorage.setItem("token", res.data.token);
       router.push("/Profile");
     } catch (error) {
       console.log(error);
-      setError(error.response.data.message);
+      setError(error.response);
     }
   };
 

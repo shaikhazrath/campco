@@ -22,7 +22,7 @@ const Chat = ({ params }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const newSocket = io("https://fromloop.vercel.app", {
+    const newSocket = io(`${process.env.NEXT_PUBLIC_URL}`, {
       auth: {
         token: token,
       },
@@ -47,7 +47,7 @@ const Chat = ({ params }) => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `https://fromloop.vercel.app/user/userChat/${recId}`,
+          `${process.env.NEXT_PUBLIC_URL}/user/userChat/${recId}`,
           {
             headers: {
               Authorization: `${localStorage.getItem("token")}`,
@@ -96,7 +96,7 @@ const Chat = ({ params }) => {
             <IoIosArrowBack color="white" size={30} />
           </Link>
           <Link
-            href="/Profile"
+            href={`/Profile/${recId}`}
             className="flex bg-foreground px-8 py-2 text-white rounded-3xl justify-between gap-4 text-xl font-bold items-center"
           >
             <Avatar className="inline-block">

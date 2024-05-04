@@ -16,7 +16,7 @@ const Search = () => {
               Authorization: token,
             },
           };
-      const response = await axios.get('https://fromloop.vercel.app/user/findpeople',config); 
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/user/findpeople`,config); 
       setPeople(response.data);
       console.log(response.data)
     } catch (error) {
@@ -33,7 +33,7 @@ const Search = () => {
       {people ? (
       people.map((p, index) => (
         <div key={index} className='flex justify-center'>
-          <Link href={`/Profile/${p._id}`} className='flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 '>
+          <Link href={`/profile/${p._id}`} className='flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 '>
           <Avatar className="h-16 w-16">
                     <AvatarImage
                       src="https://github.com/shadcn.png"

@@ -19,9 +19,10 @@ export default function RootLayout({ children }) {
             Authorization: token,
           },
         };
-        await axios.get("http://localhost:9000/user/checkauth", config);
+        await axios.get(`${process.env.NEXT_PUBLIC_URL}/user/checkauth`, config);
       } catch (error) {
         // setAuthenticated(false)
+        console.log(error)
         if (
           error.response.data.message === "Failed to authenticate token" ||
           error.response.data.message === "User not found"
