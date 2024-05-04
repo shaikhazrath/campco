@@ -36,7 +36,11 @@ export default function RootLayout({ children }) {
     setLoading(false);
   }, [router]);
   if (loading) {
-    return <h1>loading...</h1>;
+    return (
+    <html lang="en">
+    <h1>loading...</h1>;
+    </html>
+    )
   }
   return (
     <html lang="en">
