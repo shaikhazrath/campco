@@ -10,7 +10,7 @@ dotenv.config({ path: './.env' });
 import jwt from 'jsonwebtoken';
 import User from './model/userModel.js';
 const app = express();
-app.use(cors('*'));
+app.use(cors());
 app.use(express.json());
 
 const server = http.createServer(app);
