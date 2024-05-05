@@ -192,7 +192,7 @@ const Home = () => {
                   </div>
                 </MenubarTrigger>
                 <MenubarContent>
-                  <Link href="/profile">
+                  <Link href="/Profile">
                     <MenubarItem>Profie</MenubarItem>
                   </Link>
 
