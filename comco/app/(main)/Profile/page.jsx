@@ -5,6 +5,8 @@ import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { CiEdit } from "react-icons/ci";
+
 const Profile = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState(null);
@@ -98,7 +100,7 @@ const Profile = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <Avatar className="mr-4 border-4 border-white w-28 h-28 ">
+              <Avatar className="mr-4 border-4 border-white md:w-28 md:h-28 h-20 w-20 ">
                 <AvatarImage
                   src="https://github.com/shadcn.png"
                   alt="@shadcn"
@@ -106,17 +108,18 @@ const Profile = () => {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div>
-                <h1 className="text-3xl font-bold text-white">
+                <h1 className="md:text-3xl text-xl font-bold text-white ">
                   <span className="capitalize">{userInfo.name.charAt(0)}</span>
                   {userInfo.name.slice(1)}
                 </h1>
               </div>
             </div>
             <button
-              className="bg-white text-black font-semibold py-2 px-4 rounded-full hover:bg-indigo-500 hover:text-white transition duration-300"
+              className="bg-white text-black font-semibold py-2 px-4 rounded-full hover:bg-indigo-500 hover:text-white transition duration-300 text-sm"
               onClick={handleUpdate}
             >
-              Edit Profile
+             <CiEdit size={20} />
+
             </button>
           </div>
         </div>
