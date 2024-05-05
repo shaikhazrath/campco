@@ -33,7 +33,7 @@ const Search = () => {
       {people ? (
       people.map((p, index) => (
         <div key={index} className='flex justify-center'>
-          <Link href={`/profile/${p._id}`} className='flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 '>
+          <Link href={`/Profile/${p._id}`} className='flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 '>
           <Avatar className="h-16 w-16">
                     <AvatarImage
                       src="https://github.com/shadcn.png"
@@ -42,7 +42,7 @@ const Search = () => {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div>
-                  <h1 className="text-2xl font-bold tracking-wider">
+                  <h1 className="text-xl font-bold tracking-wider">
   <span style={{ textTransform: 'capitalize' }}>{p.name.charAt(0)}</span>{p.name.slice(1)}
 </h1>              
 <div className=' flex gap-5'>

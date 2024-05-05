@@ -115,7 +115,7 @@ router.get("/othersprofile/:id", verifyToken, async (req, res) => {
     }
     const { name, bio, pass_out_year, branch } = user;
     res.status(200).json({
-      username:name,
+      name,
       bio,
       pass_out_year,
       branch,
