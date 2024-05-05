@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import "../globals.css";
 import axios from "axios";
+import BottomNavBar from "@/components/BottomNavBar";
 export default function RootLayout({ children }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,13 @@ export default function RootLayout({ children }) {
   }
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="mb-16">{children}
+
+      </body>
+      <div className="md:hidden fixed  ">
+      <BottomNavBar/>
+      </div>
     </html>
+
   );
 }

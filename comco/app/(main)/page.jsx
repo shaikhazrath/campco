@@ -170,7 +170,7 @@ const Home = () => {
   return (
     <div className="flex">
       {/* sidenavbar */}
-      <div className="md:w-1/4 w-full bg-foreground h-screen">
+      <div className="md:w-1/4 w-full bg-background h-screen">
         {/* topnav */}
         <div className="flex justify-between p-5 items-center align-middle">
           {/* setting+user */}
