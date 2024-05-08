@@ -9,6 +9,7 @@ import Message from './model/messageModel.js';
 dotenv.config({ path: './.env' });
 import jwt from 'jsonwebtoken';
 import User from './model/userModel.js';
+import Posts from './router/postRouter.js'
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -101,6 +102,7 @@ mongoose
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
 app.use('/user', UserMannager);
+app.use('/posts',Posts)
 
 server.listen(process.env.PORT, () => {
   console.log(`Server started on port ${process.env.PORT}`);

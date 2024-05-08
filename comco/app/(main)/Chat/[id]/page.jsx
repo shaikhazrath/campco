@@ -91,8 +91,8 @@ const Chat = ({ params }) => {
     <div className="bg-background w-full h-screen flex flex-col ">
       {/* topbar */}
       <div className="pt-5 px-5 flex items-center justify-between">
-        <div className="flex justify-center items-center gap-10">
-          <Link href="/">
+        <div className="flex justify-center items-center gap-x-2">
+          <Link href="/Chat">
             <IoIosArrowBack color="white" size={30} />
           </Link>
           <Link

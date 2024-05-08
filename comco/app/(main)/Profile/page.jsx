@@ -32,6 +32,29 @@ const Profile = () => {
     }
   };
 
+  useEffect(()=>{
+const getUserPosts = async ()=>{
+  try {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_URL}/posts/userPosts`,
+      config
+    );
+    console.log(res.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+getUserPosts()
+  },[])
+
+
+
   useEffect(() => {
     getUserProfile();
   }, []);

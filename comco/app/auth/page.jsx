@@ -15,7 +15,13 @@ const GoogleAuth = () => {
       console.log(res)
       if(res.data.message)
       localStorage.setItem("token", res.data.token);
-      router.push("/Profile");
+    if(res.data.message === "User found"){
+      router.push("/");
+    }
+    else{
+      router.push('/Profile/Update')
+    }
+      // 
     } catch (error) {
       console.log(error);
       setError(error.response);
@@ -29,7 +35,7 @@ const GoogleAuth = () => {
   return (
   
     <div className=" h-screen  flex items-center justify-center flex-col gap-5">
-      <h1 className="font-bold uppercase text-4xl text-center font-mono text-black"> <span className=" text-green-600">Exclusive</span> College Connections</h1>
+      <h1 className="font-bold uppercase text-4xl text-center font-mono text-white"> <span className=" text-green-600">Exclusive</span> College Connections</h1>
       {error && <h1 className="text-red-500 mb-4 " >{error}</h1>}
 
     <div className="">

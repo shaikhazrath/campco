@@ -45,12 +45,12 @@ export default function RootLayout({ children }) {
   }
   return (
     <html lang="en">
-      <body className="mb-16">{children}
-
+      <body className="">
+      <div className="flex flex-col h-screen">
+      <main className="flex-grow">{children}</main>
+      <BottomNavBar />
+    </div>
       </body>
-      <div className="md:hidden fixed  ">
-      <BottomNavBar/>
-      </div>
     </html>
 
   );
