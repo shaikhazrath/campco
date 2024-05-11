@@ -7,7 +7,6 @@ import { LiaImagesSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
 
 const BottomNavBar = ({scrolling}) => {
-  console.log(scrolling)
   const pathname = usePathname();
   const isChat = pathname === '/Chat';
   const isPost = pathname === '/';

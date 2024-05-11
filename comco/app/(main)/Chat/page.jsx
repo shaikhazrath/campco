@@ -54,7 +54,6 @@ const InBox = () => {
     const handleScroll = () => {
       if (scrollContainerRef.current) {
         const currentScrollPosition = scrollContainerRef.current.scrollTop;
-        console.log(currentScrollPosition);
   
         if (currentScrollPosition <= scrollValue) {
           setScroll(false);

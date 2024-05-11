@@ -33,7 +33,6 @@ getPosts()
     const handleScroll = () => {
       if (scrollContainerRef.current) {
         const currentScrollPosition = scrollContainerRef.current.scrollTop;
-        console.log(currentScrollPosition);
   
   
         if (currentScrollPosition <= scrollValue) {
@@ -54,7 +53,7 @@ getPosts()
     return () => {
       scrollContainer.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollValue]);
+  }, [scrollValue,scrollContainerRef]);
   const mockPosts = [
     {
       _id: 1,

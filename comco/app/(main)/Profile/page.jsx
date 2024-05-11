@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,33 +27,34 @@ const Profile = () => {
   const [scroll, setScroll] = useState(false);
   const [scrollValue, setScrollValue] = useState(0);
   
+  
   useEffect(() => {
     const handleScroll = () => {
       if (scrollContainerRef.current) {
         const currentScrollPosition = scrollContainerRef.current.scrollTop;
-        console.log(currentScrollPosition);
+  
   
         if (currentScrollPosition <= scrollValue) {
           setScroll(false);
-          setScrollValue(currentScrollPosition);
+      setScrollValue(currentScrollPosition);
+
         } else {
           setScroll(true);
-          setScrollValue(currentScrollPosition);
+      setScrollValue(currentScrollPosition);
+
         }
       }
     };
   
+    if(scrollContainerRef.current){
     const scrollContainer = scrollContainerRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-    }
+    scrollContainer.addEventListener('scroll', handleScroll);
   
     return () => {
-      if (scrollContainer) {
-        scrollContainer.removeEventListener('scroll', handleScroll);
-      }
+      scrollContainer.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollValue]);
+  }
+  });
   
  
   const getUserProfile = async () => {
@@ -98,9 +100,10 @@ const Profile = () => {
     getUserProfile();
     getUserPosts();
   }, []);
+
+
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
-
   const adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
 
   const handleUpdate = () => {
@@ -135,10 +138,12 @@ const Profile = () => {
   }
 
   return (
-    <div ref={scrollContainerRef}  className=" bg-background h-screen overflow-y-scroll">
+    <div>
       <NavBar />
       <BottomNavBar scrolling={scroll}/>
-      <div className="  py-8 pb-20">
+      <div ref={scrollContainerRef} className=" h-screen overflow-scroll   ">
+
+      <div className="py-8 pb-20 ">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
@@ -268,6 +273,8 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </div>
+
   );
 };
 
