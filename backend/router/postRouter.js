@@ -56,11 +56,9 @@ router.post("/uploadPosts", verifyToken, async (req, res) => {
 });
 
 
-
-
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const posts = await Posts.find();
+    const posts = await Posts.find({ user: { $ne: req.user }}).populate('user', 'name profileImage');;
     res.json(posts);
   } catch (error) {
     res.status(400).send(error.message);

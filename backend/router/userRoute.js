@@ -19,10 +19,6 @@ router.post("/", async (req, res) => {
     const payload = ticket.getPayload();
     const { name, email,picture } = payload;
     const emailDomain = email.split("@")[1];
-
-    if (emailDomain !== "gmail.com") {
-      return res.status(403).json({ message: "Unauthorized: Only @anits.edu.in emails allowed" });
-    }
     let user = await User.findOne({ email });
     if (!user) {
       user = new User({ name, email, emailDomain,profileImage:picture});

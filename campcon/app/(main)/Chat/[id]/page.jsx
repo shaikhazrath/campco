@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import io from "socket.io-client";
 import { IoIosArrowBack, IoMdSend } from "react-icons/io";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,11 @@ const Chat = ({ params }) => {
   const [onlineStatus, setOnlineStatus] = useState(false);
   const [socket, setSocket] = useState(null);
   const [recipient, setRecipient] = useState(null);
+  const scrollRef = useRef(null)
+
+  useEffect(()=>{
+    console.log(scrollRef.current)
+  },[messages])
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -89,7 +94,6 @@ const Chat = ({ params }) => {
   return (
   
     <div className="bg-background w-full h-screen flex flex-col ">
-      {/* topbar */}
       <div className="pt-5 px-5 flex items-center justify-between">
         <div className="flex justify-center items-center gap-x-2">
           <Link href="/Chat">
@@ -112,7 +116,7 @@ const Chat = ({ params }) => {
       </div>
 
       {/* chat area */}
-      <div className="flex-grow overflow-y-auto p-5 ">
+      <div ref={scrollRef} className="flex-grow overflow-scroll p-5 ">
         {/* messages go here */}
         {loading ? (
           <p>Loading messages...</p>
@@ -122,11 +126,11 @@ const Chat = ({ params }) => {
               messages.map((message, index) => (
                 <div key={index}>
                   {message.recipient === recId ? (
-                    <div className="bg-gray-200 p-3 rounded-lg rounded-br-none  ml-auto w-max m-3 max-w-xs ">
+                    <div className="bg-gray-200 p-3 rounded-lg rounded-br-none  ml-auto w-2/3 m-3 max-w-xs ">
                       <p>{message.message}</p>
                     </div>
                   ) : (
-                    <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-max">
+                    <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-2/3">
                       <p>{message.message}</p>
                     </div>
                   )}

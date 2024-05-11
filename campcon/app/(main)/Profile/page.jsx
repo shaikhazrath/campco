@@ -141,8 +141,8 @@ const Profile = () => {
     <div>
       <NavBar />
       <BottomNavBar scrolling={scroll}/>
-      <div ref={scrollContainerRef} className=" h-screen overflow-scroll   ">
-
+      <div ref={scrollContainerRef} className=" h-screen overflow-scroll flex justify-center  ">
+<div className=" md:w-1/3 w-full">
       <div className="py-8 pb-20 ">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
@@ -210,7 +210,7 @@ const Profile = () => {
 
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-white mb-6">Posts</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="flex justify-center flex-col gap-6 pb-10">
           {posts &&
             posts.map((post) => (
               <div
@@ -273,6 +273,8 @@ const Profile = () => {
         </div>
       </div>
     </div>
+</div>
+
     </div>
 
   );

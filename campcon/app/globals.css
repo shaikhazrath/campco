@@ -109,11 +109,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(0, 0%, 95%); /* Color of scrollbar track */
+  background: #000000;  /* Color of scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000; /* Color of scrollbar thumb */
+  background:  hsl(0, 0%, 95%);/* Color of scrollbar thumb */
 }
 
 ::-webkit-scrollbar-thumb:hover {

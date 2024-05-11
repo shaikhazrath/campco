@@ -21,9 +21,8 @@ const Search = () => {
         `${process.env.NEXT_PUBLIC_URL}/user/findpeople`,
         config
       );
-      console.log(res)
+      console.log(res);
       setPeople(res.data);
-
     } catch (error) {
       console.error("Error fetching random user:", error);
     }
@@ -35,12 +34,14 @@ const Search = () => {
   return (
     <div className=" text-primary">
       <NavBar />
-      {people ? (
-        <>
-       {people.requests && people.requests.length !== 0 && (
-  <h1 className=" text-center pt-5 font-bold  uppercase">Your Requests</h1>
-)}
-          { people.requests.map((r, index) => (
+      {people && (
+        <div className=" overflow-scroll h-screen pb-16">
+          {people.requests && people.requests.length !== 0 && (
+            <h1 className=" text-center pt-5 font-bold  uppercase">
+              Your Requests
+            </h1>
+          )}
+          {people.requests.map((r, index) => (
             <div key={index} className="flex justify-center">
               <Link
                 href={`/Profile/${r._id}`}
@@ -64,14 +65,13 @@ const Search = () => {
               </Link>
             </div>
           ))}
-                 {people.usersToConnect && people.usersToConnect.length !== 0 && (
-  <h1>Connect with this people</h1>
-)}
+          {/* {people.usersToConnect && people.usersToConnect.length !== 0 && (
+          )} */}
           {people.usersToConnect.map((p, index) => (
             <div key={index} className="flex justify-center">
               <Link
                 href={`/Profile/${p._id}`}
-                className="flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 "
+                className="flex gap-10 items-center bg-foreground m-5 rounded-xl px-10 py-3 w-1/4 "
               >
                 <Avatar className="h-16 w-16">
                   <AvatarImage
@@ -94,13 +94,10 @@ const Search = () => {
               </Link>
             </div>
           ))}
-        </>
-      ) : (
-        <p className="text-white ">No user fetched yet</p>
+        </div>
       )}
     </div>
   );
-  
 };
 
 export default Search;
