@@ -126,11 +126,11 @@ const Chat = ({ params }) => {
                 <div key={index}>
                   {message.recipient === recId ? (
                     <div className="bg-gray-200 p-3 rounded-lg rounded-br-none  ml-auto w-2/3 m-3 max-w-xs ">
-                      <p>{message.message}</p>
+                      <p className=" w-full">{message.message}</p>
                     </div>
                   ) : (
                     <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-2/3 m-3 max-w-xs">
-                      <p>{message.message}</p>
+                      <p className="w-full"> {message.message}</p>
                     </div>
                   )}
                 </div>
