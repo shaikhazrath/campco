@@ -13,10 +13,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 const Chat = ({ params }) => {
   const recId = params.id;
   const [messages, setMessages] = useState([]);
-  const [userId, setUserId] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [onlineStatus, setOnlineStatus] = useState(false);
   const [socket, setSocket] = useState(null);
   const [recipient, setRecipient] = useState(null);
   const scrollRef = useRef(null)
