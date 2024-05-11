@@ -1,9 +1,10 @@
 import React from 'react'
 import Posts from './Posts/page'
+import BottomNavBar from '@/components/BottomNavBar'
 
 const Home = () => {
   return (
-    <div>
+    <div className=''>
     <Posts/>
     </div>
   )

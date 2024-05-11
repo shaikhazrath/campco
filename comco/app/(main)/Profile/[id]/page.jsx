@@ -4,13 +4,24 @@ import NavBar from "@/components/NavBar";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { MdDelete } from "react-icons/md";
 
 const OthersProfile = ({ params }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [connectionStatus, setConnectionStatus] = useState(null);
   const [connectedStatusLoading,setConnectedStatusLoading] = useState(false)
+  const [posts, setPosts] = useState(null);
   const userId = params.id;
 
   const getProfile = async () => {
@@ -26,6 +37,7 @@ const OthersProfile = ({ params }) => {
         config
       );
       setUserInfo(res.data);
+      
       console.log(res.data);
       setConnectionStatus(res.data.connectionStatus);
       setLoading(false);
@@ -35,12 +47,32 @@ const OthersProfile = ({ params }) => {
     }
   };
 
+  const getUserPosts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: token,
+        },
+      };
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_URL}/posts/userPosts/${userId}`,
+        config
+      );
+      console.log(res.data);
+      setPosts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProfile();
+    getUserPosts();
   }, []);
 
   const sendRequest = async () => {
-    connectedStatusLoading(true)
+    setConnectedStatusLoading(true)
     try {
       const token = localStorage.getItem("token");
       const config = {
@@ -52,13 +84,13 @@ const OthersProfile = ({ params }) => {
         `${process.env.NEXT_PUBLIC_URL}/user/sendRequest/${userId}`,
         config
       );
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
       getProfile()
       console.log(req);
       setIsRequested(true); // Update state to reflect the request being sent
     } catch (error) {
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
       console.log(error);
     }
@@ -68,7 +100,7 @@ const OthersProfile = ({ params }) => {
     return <h1>Loading....</h1>;
   }
   const removeRequest = async () => {
-    connectedStatusLoading(true)
+    setConnectedStatusLoading(true)
 
     try {
       const token = localStorage.getItem("token");
@@ -83,18 +115,18 @@ const OthersProfile = ({ params }) => {
       );
       console.log(req);
       getProfile()
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
       setIsRequested(false);
     } catch (error) {
       console.log(error);
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
     }
   };
 
   const acceptRequest = async () => {
-    connectedStatusLoading(true)
+    setConnectedStatusLoading(true)
 
     try {
       const token = localStorage.getItem("token");
@@ -108,12 +140,12 @@ const OthersProfile = ({ params }) => {
         config
       );
       getProfile()
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
       console.log(req);
       setIsRequested(false);
     } catch (error) {
-    connectedStatusLoading(false)
+      setConnectedStatusLoading(false)
 
       console.log(error);
     }
@@ -122,50 +154,7 @@ const OthersProfile = ({ params }) => {
   const currentMonth = new Date().getMonth();
 
   const adjustedCurrentYear = currentMonth >= 6 ? currentYear + 1 : currentYear;
-  const mockPosts = [
-    {
-      _id: 1,
-      userName: 'John Doe',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-01T10:30:00'),
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    },
-    {
-      _id: 2,
-      userName: 'Jane Smith',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-02T14:45:00'),
-      description: 'Nullam quis risus eget urna mollis ornare vel eu leo.',
-    },
-    {
-      _id: 3,
-      userName: 'Bob Johnson',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-03T08:15:00'),
-      description: 'Sed posuere consectetur est at lobortis. Donec id elit non mi porta gravida at eget metus.',
-    },
-    {
-      _id: 4,
-      userName: 'Sarah Lee',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-04T16:20:00'),
-      description: 'Maecenas faucibus mollis interdum. Cras mattis consectetur purus sit amet fermentum.',
-    },
-    {
-      _id: 5,
-      userName: 'Michael Brown',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-05T12:00:00'),
-      description: 'Aenean lacinia bibendum nulla sed consectetur. Nullam quis risus eget urna mollis ornare vel eu leo.',
-    },
-    {
-      _id: 6,
-      userName: 'Emily Davis',
-      userAvatar: 'https://via.placeholder.com/40',
-      postedTime: new Date('2023-05-06T09:30:00'),
-      description: 'Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.',
-    },
-  ];
+
   return (
     <div className=" bg-background h-screen overflow-y-scroll">
     <NavBar/>
@@ -176,7 +165,7 @@ const OthersProfile = ({ params }) => {
           <div className="flex items-center">
             <Avatar className="mr-4 border-4 border-white md:w-28 md:h-28 h-20 w-20 ">
               <AvatarImage
-                src="https://github.com/shadcn.png"
+                src={userInfo.profileImage}
                 alt="@shadcn"
               />
               <AvatarFallback>CN</AvatarFallback>
@@ -276,52 +265,69 @@ const OthersProfile = ({ params }) => {
 {/* mockPosts */}
 {/* Posts Section */}
 <div className="container mx-auto px-4 py-8">
-<h2 className="text-2xl font-bold text-white mb-6">Posts</h2>
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-  {mockPosts.map((post) => (
-    <div
-      key={post._id}
-      className="bg-foreground rounded-lg shadow-lg overflow-hidden"
-    >
-      <div className="p-4 flex">
-        <Avatar className="mr-4 w-10 h-10">
-          <AvatarImage src={post.userAvatar} alt={post.userName} />
-          <AvatarFallback>{post.userName.charAt(0)}</AvatarFallback>
-        </Avatar>
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <h3 className="text-white font-semibold mr-2">
-                {post.userName}
-              </h3>
-              <span className="text-sm text-gray-400">
-                {post.postedTime.toLocaleString()}
-              </span>
-            </div>
-            <button className="text-gray-400 hover:text-white transition-colors duration-300">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <h2 className="text-2xl font-bold text-white mb-6">Posts</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {posts &&
+            posts.map((post) => (
+              <div
+                key={post._id}
+                className="bg-foreground rounded-lg shadow-lg overflow-hidden "
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                />
-              </svg>
-            </button>
-          </div>
-          <p className="text-gray-300">{post.description}</p>
+                <div className="p-4 flex flex-col">
+                  <div className="flex items-center justify-between mb-2 border-b border-b-gray-800 pb-4">
+                    <div className="flex items-center">
+                      <Avatar className="mr-4 w-10 h-10">
+                        <AvatarImage
+                          src={userInfo.profileImage}
+                          alt={userInfo.name}
+                        />
+                      </Avatar>
+                      <h3 className="text-white font-medium text-sm mr-2">
+                        {userInfo.name}
+                      </h3>
+                    </div>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild className=" bg-foreground">
+                        <div>
+                          <MdDelete className=" text-red-500" size={20} />
+                        </div>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="text-white">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure? you want to delete
+                          </AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeletePost(post._id )}
+                            className="bg-red-500 text-xl font-bold w-full"
+                          >
+                            Delete
+                            <MdDelete className=" text-white" size={20} />
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+
+                  <div>
+                    <p className="text-gray-300">{post.posts}</p>
+                    <span className="text-sm text-gray-400">
+                      {
+                        new Date(post.DateAndTime)
+                          .toLocaleString()
+                          .split(",")[0]
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
-    </div>
-  ))}
-</div>
-</div>
   </div>
   );
 };

@@ -2,11 +2,12 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect,useRef} from "react";
 import {IoMdSearch} from "react-icons/io";
 import axios from "axios";
 import NavBar from "@/components/NavBar";
 import { useRouter } from "next/navigation";
+import BottomNavBar from "@/components/BottomNavBar";
 const InBox = () => {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("");
@@ -44,17 +45,50 @@ const InBox = () => {
       router.push(`/Chat/${userId}`);
 
   };
-if(loading){
+
+  const scrollContainerRef = useRef(null);
+  const [scroll, setScroll] = useState(false);
+  const [scrollValue, setScrollValue] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const currentScrollPosition = scrollContainerRef.current.scrollTop;
+        console.log(currentScrollPosition);
+  
+        if (currentScrollPosition <= scrollValue) {
+          setScroll(false);
+          setScrollValue(currentScrollPosition);
+        } else {
+          setScroll(true);
+          setScrollValue(currentScrollPosition);
+        }
+      }
+    };
+  
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+    }
+  
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [scrollValue]);
+  if(loading){
   return <h1>loading....</h1>
 }
   return (
   <>
   <div className=" ">
   <NavBar/>
+  <BottomNavBar/>
   </div>
   <div className="flex justify-center flex-col w-full  md:items-center">
 
-  <div className=" md:w-1/4">
+  <div className=" md:w-1/4 h-screen overflow-scroll"  ref={scrollContainerRef}>
 
     <div className="p-5 ">
       <div className="relative">

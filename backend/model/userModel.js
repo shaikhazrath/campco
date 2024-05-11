@@ -5,6 +5,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profileImage:{
+        type: String,
+        required: true,
+        default:'https://res.cloudinary.com/shaikhazrath/image/upload/v1715227149/jzxnjlgrn34lhy057hcj.png'
+    },
     email: {
         type: String,
         required: true,

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cloudinary": "^2.2.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "google-auth-library": "^9.8.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.1",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.12",
     "socket.io": "^4.7.4",
     "uploadthing": "^6.10.1",

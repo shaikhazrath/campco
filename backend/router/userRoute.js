@@ -6,38 +6,32 @@ import { OAuth2Client } from "google-auth-library";
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 import verifyToken from "../middleware/authMiddleware.js";
 import Message from "../model/messageModel.js";
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/shopImage' })
+
 router.post("/", async (req, res) => {
   try {
     const { idToken } = req.body;
-
     const ticket = await client.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    const { name, email } = payload;
+    const { name, email,picture } = payload;
     const emailDomain = email.split("@")[1];
 
-    // Check if the email domain is allowed
-    // if (emailDomain !== "anits.edu.in") {
-    //   return res.status(403).json({ message: "Unauthorized: Only @anits.edu.in emails allowed" });
-    // }
-
-    // Find or create the user
+    if (emailDomain !== "gmail.com") {
+      return res.status(403).json({ message: "Unauthorized: Only @anits.edu.in emails allowed" });
+    }
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ name, email, emailDomain });
+      user = new User({ name, email, emailDomain,profileImage:picture});
       await user.save();
     }
-
-    // Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
-
-    // Return response
     const responseData = {
       token,
       name,
-      email,
       message: user.isNew ? 'New user created' : 'User found',
     };
     res.status(201).json(responseData);
@@ -54,7 +48,6 @@ router.get("/checkauth",verifyToken,(req,res)=>{
     res.status(200).json({message});
   } catch (error) {
     res.status(400).send(error.message);
-
   }
 })
 
@@ -132,22 +125,24 @@ router.get("/othersprofile/:id", verifyToken, async (req, res) => {
 router.get("/findpeople", verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
-    const currentUser = await User.findById(userId);
-    const usersWithSimilarBackground = await User.find({
+    const usersToConnect = await User.find({
       _id: { $ne: userId }, 
-      // branch: currentUser.branch,
-      // pass_out_year: currentUser.pass_out_year
+      requests: { $ne: userId },
+      requested: { $ne: userId },
+      connectedUsers: { $ne: userId }  
     });
-    const mutualConnections = currentUser.connectedUsers;
-    const recommendedUsers = usersWithSimilarBackground.filter(user => {
-      return user._id !== userId && !mutualConnections.includes(user._id);
-    });
-    res.status(200).json(recommendedUsers);
+    const currentUser = req.user;
+    await currentUser.populate("requests");
+    const requests = currentUser.requests;
+
+    res.status(200).json({ usersToConnect, requests });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
 
 router.get("/sendRequest/:userId", verifyToken, async (req, res) => {
   try {
@@ -239,17 +234,7 @@ router.get("/acceptRequest/:userId", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/viewRequests", verifyToken, async (req, res) => {
-  try {
-    const currentUser = req.user;
-    await currentUser.populate("requests");
-    const requests = currentUser.requests;
-    res.status(200).json(requests);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+
 
 router.get("/inbox", verifyToken, async (req, res) => {
   try {

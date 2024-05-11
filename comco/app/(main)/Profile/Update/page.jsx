@@ -86,7 +86,7 @@ const UpdateProfile = () => {
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-center mb-4">
-          <Avatar className="mr-4">
+          <Avatar className="md:w-36 h-36 w-36">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

@@ -1,12 +1,60 @@
+'use client'
 import NavBar from "@/components/NavBar";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { IoMdSearch } from "react-icons/io";
-import { CiSquarePlus } from "react-icons/ci";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
+import React, { useEffect ,useState,useRef} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
+import BottomNavBar from "@/components/BottomNavBar";
 const Posts = () => {
+  const getPosts = async()=>{
+    try {
+      const token = localStorage.getItem("token");
+
+      const config = {
+          headers: {
+            Authorization: token,
+          },
+        };
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/posts`,config); 
+    console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+getPosts()
+  },[])
+
+  const scrollContainerRef = useRef(null);
+  const [scroll, setScroll] = useState(false);
+  const [scrollValue, setScrollValue] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const currentScrollPosition = scrollContainerRef.current.scrollTop;
+        console.log(currentScrollPosition);
+  
+  
+        if (currentScrollPosition <= scrollValue) {
+          setScroll(false);
+      setScrollValue(currentScrollPosition);
+
+        } else {
+          setScroll(true);
+      setScrollValue(currentScrollPosition);
+
+        }
+      }
+    };
+  
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer.addEventListener('scroll', handleScroll);
+  
+    return () => {
+      scrollContainer.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollValue]);
   const mockPosts = [
     {
       _id: 1,
@@ -54,13 +102,41 @@ const Posts = () => {
       description:
         "Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.",
     },
+    {
+      _id: 7,
+      userName: "Emily Davis",
+      userAvatar: "https://via.placeholder.com/40",
+      postedTime: new Date("2023-05-06T09:30:00"),
+      description:
+        "Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.",
+    },
+    {
+      _id: 8,
+      userName: "Emily Davis",
+      userAvatar: "https://via.placeholder.com/40",
+      postedTime: new Date("2023-05-06T09:30:00"),
+      description:
+        "Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.",
+    },
+    {
+      _id: 9,
+      userName: "Emily Davis",
+      userAvatar: "https://via.placeholder.com/40",
+      postedTime: new Date("2023-05-06T09:30:00"),
+      description:
+        "Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.",
+    },
   ];
   return (
-    <div>
+    <div >
+
       <NavBar />
-      <div className=" h-screen overflow-scroll ">
-        <div className="flex flex-row justify-center items-center px-4 pt-4 gap-3 ">
-          <div className="w-full">
+
+<BottomNavBar scrolling={scroll}/>
+      <div ref={scrollContainerRef} className=" h-screen overflow-scroll ">
+
+        {/* <div className="flex flex-row justify-center items-center px-4 pt-4 gap-3 ">
+          <div className="w-full  md:w-1/3">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <IoMdSearch className=" text-black" size={20} />
@@ -74,17 +150,10 @@ const Posts = () => {
               />
             </div>
           </div>
-          <Link
-            href="/Posts/UploadPost"
-            className="bg-gradient-to-r from-cyan-500 to-blue-500  rounded-md  "
-          >
-            <CiSquarePlus size={25} />
-          </Link>
-        </div>
-
+        
+        </div> */}
         <div className="container mx-auto px-4 py-4">
-          <h2 className="text-2xl font-bold text-white mb-6">Posts</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
             {mockPosts.map((post) => (
               <div
                 key={post._id}
