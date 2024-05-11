@@ -51,5 +51,4 @@ const generateUsers = async () => {
     }
 };
 
-// Call the function to generate users and their posts
 generateUsers();

@@ -21,9 +21,10 @@ const Chat = ({ params }) => {
   const [recipient, setRecipient] = useState(null);
   const scrollRef = useRef(null)
 
-  useEffect(()=>{
-    console.log(scrollRef.current)
-  },[messages])
+ useEffect(() => {
+    // Scroll to bottom when messages update
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -94,7 +95,7 @@ const Chat = ({ params }) => {
   return (
   
     <div className="bg-background w-full h-screen flex flex-col ">
-      <div className="pt-5 px-5 flex items-center justify-between">
+      <div className="py-5 px-5 flex items-center justify-between ">
         <div className="flex justify-center items-center gap-x-2">
           <Link href="/Chat">
             <IoIosArrowBack color="white" size={30} />
@@ -116,7 +117,7 @@ const Chat = ({ params }) => {
       </div>
 
       {/* chat area */}
-      <div ref={scrollRef} className="flex-grow overflow-scroll p-5 ">
+      <div className="flex-grow overflow-scroll p-5 ">
         {/* messages go here */}
         {loading ? (
           <p>Loading messages...</p>
@@ -130,7 +131,7 @@ const Chat = ({ params }) => {
                       <p>{message.message}</p>
                     </div>
                   ) : (
-                    <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-2/3">
+                    <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-2/3 m-3 max-w-xs">
                       <p>{message.message}</p>
                     </div>
                   )}
@@ -138,6 +139,8 @@ const Chat = ({ params }) => {
               ))}
           </div>
         )}
+                  <div ref={scrollRef} />
+
       </div>
 
       {/* input area */}
