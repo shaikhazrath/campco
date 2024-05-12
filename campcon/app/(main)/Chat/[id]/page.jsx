@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { IoIosArrowBack, IoMdSend } from "react-icons/io";
 import { Input } from "@/components/ui/input";
@@ -17,13 +17,11 @@ const Chat = ({ params }) => {
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
   const [recipient, setRecipient] = useState(null);
-  const scrollRef = useRef(null)
-
- useEffect(() => {
+  const scrollRef = useRef(null);
+  useEffect(() => {
     // Scroll to bottom when messages update
-    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     const newSocket = io(`${process.env.NEXT_PUBLIC_URL}`, {
@@ -46,7 +44,6 @@ const Chat = ({ params }) => {
       newSocket.disconnect();
     };
   }, []);
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -59,8 +56,8 @@ const Chat = ({ params }) => {
           }
         );
         setMessages(response.data.messages);
-        setRecipient(response.data.recipient.name);
-        setLoading(false);
+        console.log(response.data.messages)
+        setRecipient(response.data.recipient);
       } catch (error) {
         console.error(error);
       } finally {
@@ -70,14 +67,12 @@ const Chat = ({ params }) => {
 
     fetchMessages();
   }, [recId]);
-
   const sendMessage = () => {
     if (socket && newMessage.trim() !== "") {
       socket.emit("chat", { recipientId: recId, messageText: newMessage });
       setNewMessage("");
     }
   };
-
   useEffect(() => {
     if (socket) {
       socket.on("messageReceived", (message) => {
@@ -85,74 +80,58 @@ const Chat = ({ params }) => {
       });
     }
   }, [socket]);
-
   if (loading) {
     return <h1>loading....</h1>;
   }
-
   return (
-  
-    <div className="bg-background w-full h-screen flex flex-col ">
-      <div className="py-5 px-5 flex items-center justify-between ">
-        <div className="flex justify-center items-center gap-x-2">
-          <Link href="/Chat">
-            <IoIosArrowBack color="white" size={30} />
-          </Link>
-          <Link
-            href={`/Profile/${recId}`}
-            className="flex bg-foreground px-8 py-2 text-white rounded-3xl justify-between gap-4 text-xl font-bold items-center"
-          >
-            <Avatar className="inline-block">
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <h1>{recipient}</h1>
-          </Link>
+    <div className=" bg-background text-white text-sm flex flex-col h-screen justify-between ">
+      {recipient && 
+      <nav className="flex w-full items-center gap-5 bg-foreground px-10 h-16">
+        <Link href="/Chat">
+          <IoIosArrowBack />
+        </Link>
+        <Link href="/Profile" className="w-full">
+          <h1 className=" text-base font-bold text-center">{recipient.name}</h1>
+        </Link>
+      </nav>
+}
+      {/* messages */}
+    
+      <div className=" h-screen  overflow-scroll">
+      {messages &&   messages.map((message, index) => (
+        <div  key={index}>
+{message.recipient === recId ? (
+        <div className=" w-1/2 bg-blue-600 m-5 rounded-2xl p-3 rounded-bl-none">
+          <h1>
+          {message.message}
+          </h1>
         </div>
-        <div>
-          <BsThreeDotsVertical color="white" size={30} />
+         ) : (
+        <div className=" w-1/2 bg-white text-black m-5 rounded-2xl p-3 rounded-br-none ml-auto">
+          <h1>
+          {message.message}
+          </h1>
         </div>
+          )}
+        </div>
+
+      ))}
+      <div ref={scrollRef} />
       </div>
 
-      {/* chat area */}
-      <div className="flex-grow overflow-scroll p-5 ">
-        {/* messages go here */}
-        {loading ? (
-          <p>Loading messages...</p>
-        ) : (
-          <div>
-            {messages &&
-              messages.map((message, index) => (
-                <div key={index}>
-                  {message.recipient === recId ? (
-                    <div className="bg-gray-200 p-3 rounded-lg rounded-br-none  ml-auto w-2/3 m-3 max-w-xs ">
-                      <p className=" w-full">{message.message}</p>
-                    </div>
-                  ) : (
-                    <div className="bg-blue-500 text-white p-3 rounded-lg rounded-bl-none w-2/3 m-3 max-w-xs">
-                      <p className="w-full"> {message.message}</p>
-                    </div>
-                  )}
-                </div>
-              ))}
-          </div>
-        )}
-                  <div ref={scrollRef} />
-
-      </div>
-
-      {/* input area */}
-      <div className="flex items-center p-5 gap-5  ">
-        <Textarea
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Send Message....."
-          className="flex min-h-[50px] w-full rounded-md border border-input bg-background px-3 py-2 text-lg ring-offset-background placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 text-white"
-        />
-        <Button className="bg-green-400" onClick={sendMessage}>
-          <IoMdSend size={25} />
-        </Button>
+      {/* input */}
+      <div class="">
+        <div class="relative  text-white">
+          <div
+            contenteditable="true"
+            role="textbox"
+            class="bg-foreground rounded-none border-gray-300 p-2  h-16 max-h-24  overflow-y-scroll focus:outline-none resize-none pr-16 text-white"
+            placeholder="Type a message..."
+          ></div>
+          <button class="absolute top-1 right-0 bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 focus:outline-none rounded-none">
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
